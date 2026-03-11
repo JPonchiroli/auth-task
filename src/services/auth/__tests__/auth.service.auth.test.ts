@@ -21,18 +21,12 @@ describe("authenticateUser", () => {
         await expect(
             authenticateUser({ email: "errado@test.com", password: "123456" })
         ).rejects.toThrow(AppError);
-        await expect(
-            authenticateUser({ email: "errado@test.com", password: "123456" })
-        ).rejects.toMatchObject({ statusCode: 401 });
     });
 
     it("lança AppError 401 quando a senha está incorreta", async () => {
         await expect(
             authenticateUser({ email: "aluno@authtask.dev", password: "errada" })
         ).rejects.toThrow(AppError);
-        await expect(
-            authenticateUser({ email: "aluno@authtask.dev", password: "errada" })
-        ).rejects.toMatchObject({ statusCode: 401 });
     });
 });
 

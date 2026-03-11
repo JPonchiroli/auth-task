@@ -28,23 +28,35 @@ describe("authenticateUser", () => {
             authenticateUser({ email: "aluno@authtask.dev", password: "errada" })
         ).rejects.toThrow(AppError);
     });
+
+    it("lança AppError 401 quando credenciais são inválidas", async () => {
+        await expect(
+            authenticateUser({ email: "errado@test.com", password: "123456" })
+        ).rejects.toThrow(AppError);
+    
+    });
+    
+    it("lança AppError 401 quando credenciais são inválidas", async () => {
+        await expect(
+            authenticateUser({ email: "errado@test.com", password: "123456" })
+        ).rejects.toThrow(AppError);
+    
+    });
 });
 
-
-
-    it("lança AppError 401 quando credenciais são inválidas", async () => {
-        await expect(
-            authenticateUser({ email: "errado@test.com", password: "123456" })
-        ).rejects.toThrow(AppError);
-
+describe("sanitizeUserId", () => {
+    it("normaliza e limpa o userId", () => {
+        expect(sanitizeUserId("  User@123  ")).toBe("user_123");
     });
 
-    it("lança AppError 401 quando credenciais são inválidas", async () => {
-        await expect(
-            authenticateUser({ email: "errado@test.com", password: "123456" })
-        ).rejects.toThrow(AppError);
-
+    it("remove espaços e caracteres especiais", () => {
+        expect(sanitizeUserId("  Test@User  ")).toBe("test_user");
     });
+
+    it("converte para lowercase", () => {
+        expect(sanitizeUserId("  ADMIN@ID  ")).toBe("admin_id");
+    });
+});
 
 describe("sanitizeUserId", () => {
     it("normaliza e limpa o userId", () => {

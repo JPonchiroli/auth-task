@@ -21,4 +21,9 @@ describe("validateLoginPayload", () => {
         expect(result.password).toBe("Senha deve conter pelo menos 6 caracteres.");
     });
 
+    it("retorna erro quando senha está vazia", () => {
+        const result = validateLoginPayload({ email: "a@b.com", password: "123456" });
+        expect(result).toEqual({});
+    });
+
 });

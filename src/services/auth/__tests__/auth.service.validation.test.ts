@@ -27,3 +27,13 @@ describe("validateLoginPayload", () => {
     });
 
 });
+
+describe("hasValidationErrors", () => {
+    it("retorna false quando não há erros", () => {
+        expect(hasValidationErrors({})).toBe(false);
+    });
+
+    it("retorna true quando há erros", () => {
+        expect(hasValidationErrors({ email: "E-mail é obrigatório." })).toBe(true);
+    });
+});

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { DashboardClient } from "../DashboardClient";
 
@@ -26,16 +26,25 @@ describe("DashboardClient", () => {
 
     render(<DashboardClient />);
 
+    // Aguarda o loading sumir — confirma que o ciclo assíncrono terminou
+    await waitFor(() =>
+      expect(screen.queryByText(/carregando tarefas/i)).not.toBeInTheDocument()
+    );
+
     expect(screen.getByText(/painel de tarefas/i)).toBeInTheDocument();
     expect(screen.getByText(/test@test.com/i)).toBeInTheDocument();
   });
 
-  it("mostra loading inicialmente", () => {
+  it("mostra loading inicialmente", async () => {
+    // Promise que nunca resolve — simula fetch travado
     (fetch as jest.Mock).mockImplementation(() => new Promise(() => {}));
 
     render(<DashboardClient />);
 
     expect(screen.getByText(/carregando tarefas/i)).toBeInTheDocument();
+
+    // Limpa o fetch pendente para não vazar entre testes
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
   });
 
   it("mostra erro quando fetch falha", async () => {
@@ -46,6 +55,7 @@ describe("DashboardClient", () => {
 
     render(<DashboardClient />);
 
+    // findBy já aguarda internamente — sem necessidade de waitFor extra
     expect(await screen.findByText(/erro ao carregar tarefas/i)).toBeInTheDocument();
   });
 
@@ -59,8 +69,12 @@ describe("DashboardClient", () => {
 
     render(<DashboardClient />);
 
-    const button = screen.getByRole("button", { name: /logout/i });
+    // Aguarda estado estabilizar antes de interagir
+    await waitFor(() =>
+      expect(screen.queryByText(/carregando tarefas/i)).not.toBeInTheDocument()
+    );
 
+    const button = screen.getByRole("button", { name: /logout/i });
     await user.click(button);
 
     expect(logoutMock).toHaveBeenCalled();

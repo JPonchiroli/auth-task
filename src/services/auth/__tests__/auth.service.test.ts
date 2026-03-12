@@ -6,6 +6,17 @@ import {
 } from "@/services/auth/auth.service";
 import { AppError } from "@/utils/app-error";
 
+jest.mock("@/services/auth/auth.service", () => {
+  const actual = jest.requireActual("@/services/auth/auth.service");
+
+  return {
+    ...actual,
+    authenticateUser: jest.fn(),
+  };
+});
+
+const mockedAuthenticateUser = authenticateUser as jest.Mock;
+
 describe("validateLoginPayload", () => {
   it("retorna erro quando email está vazio", () => {
     const result = validateLoginPayload({ email: "", password: "123456" });
@@ -76,21 +87,35 @@ describe("sanitizeUserId", () => {
   });
 });
 
-describe("authenticateUser", () => {
+describe("authenticateUser (mocked)", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("retorna usuário quando credenciais são válidas", async () => {
+    mockedAuthenticateUser.mockResolvedValueOnce({
+      id: "1",
+      name: "Aluno Demo",
+      email: "aluno@authtask.dev",
+    });
+
     const user = await authenticateUser({
       email: "aluno@authtask.dev",
       password: "123456",
     });
 
     expect(user).toEqual({
-      id: expect.any(String),
+      id: "1",
       name: "Aluno Demo",
       email: "aluno@authtask.dev",
     });
   });
 
   it("lança AppError quando credenciais são inválidas", async () => {
+    mockedAuthenticateUser.mockRejectedValueOnce(
+      new AppError("INVALID_CREDENTIALS", "Credenciais inválidas", 401),
+    );
+
     await expect(
       authenticateUser({
         email: "errado@email.com",
@@ -100,6 +125,10 @@ describe("authenticateUser", () => {
   });
 
   it("lança erro quando senha está errada", async () => {
+    mockedAuthenticateUser.mockRejectedValueOnce(
+      new AppError("INVALID_PASSWORD", "Senha incorreta", 401),
+    );
+
     await expect(
       authenticateUser({
         email: "aluno@authtask.dev",

@@ -14,6 +14,11 @@ const config: Config = {
     "src/**/*.{ts,tsx}",
     "!src/**/*.d.ts",
     "!src/**/__tests__/**",
+    // Arquivos de infraestrutura/configuração sem lógica testável
+    "!src/app/layout.tsx",
+    "!src/app/**/page.tsx",
+    "!src/components/providers/**",
+    "!src/services/**/*.types.ts",
   ],
  //Descomente na Etapa 10 do GUIA_EVOLUTIVO.md para exigir cobertura mínima
  coverageThreshold: {

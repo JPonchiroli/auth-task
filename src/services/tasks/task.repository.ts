@@ -21,9 +21,10 @@ type TaskRepository = {
   deleteForUser(userId: string, taskId: string): Promise<void>;
 };
 
+// task.repository.ts — corrigir getFirestoreSettings
 function getFirestoreSettings(): { projectId: string; apiKey: string } {
-  const projectId = process.env.FIREBASE_PROJECT_ID ? process.env.FIREBASE_PROJECT_ID : 'nao tem';
-  const apiKey = process.env.FIREBASE_WEB_API_KEY ? process.env.FIREBASE_WEB_API_KEY : 'nao tem';
+  const projectId = process.env.FIREBASE_PROJECT_ID;
+  const apiKey = process.env.FIREBASE_WEB_API_KEY;
 
   if (!projectId || !apiKey) {
     throw new AppError(

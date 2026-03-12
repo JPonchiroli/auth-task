@@ -108,7 +108,7 @@ describe("getSessionCookieOptions", () => {
     const original = process.env.NODE_ENV;
     Object.defineProperty(process.env, "NODE_ENV", { value: "production", writable: true });
     const result = getSessionCookieOptions();
-    expect(result.cookieOptions.secure).toBe(false);
+    expect(result.cookieOptions.secure).toBe(true);
     Object.defineProperty(process.env, "NODE_ENV", { value: original, writable: true });
   });
 });

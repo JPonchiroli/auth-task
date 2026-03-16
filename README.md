@@ -119,12 +119,12 @@ Consulte `.env.example`. Principais:
 
 ## Checklist de entrega (alunos)
 
-- [ ] Link do repositório GitHub
+- [X] Link do repositório GitHub
 - [ ] README com arquitetura, decisões e estratégia de testes
-- [ ] Histórico de commits demonstrando TDD (3 funcionalidades)
-- [ ] Cobertura mínima: 85% statements, 80% branches, 85% functions, 85% lines
-- [ ] Pipeline CI funcionando
-- [ ] Apresentação 5–10 min: estrutura, teste complexo, pipeline
+- [X] Histórico de commits demonstrando TDD (3 funcionalidades)
+- [X] Cobertura mínima: 85% statements, 80% branches, 85% functions, 85% lines
+- [X] Pipeline CI funcionando
+- [X] Apresentação 5–10 min: estrutura, teste complexo, pipeline
 
 ---
 
